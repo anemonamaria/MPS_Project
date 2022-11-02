@@ -19,7 +19,7 @@ pe setul de date va prezice un prag de binarizare optim.
 Limbaj de programare: C++
 Framework: STL
 
-Resurse folosite: Teamgantt, app.diagrams.net
+Resurse folosite: Teamgantt, app.diagrams.net, visual-paradigm
 
 Milestone-uri:
 [MPS-milestones-gantt.pdf](https://github.com/anemonamaria/MPS_Project/files/9920464/MPS-milestones-gantt.pdf)
