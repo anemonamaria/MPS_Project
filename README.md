@@ -23,4 +23,5 @@ Resurse folosite: Teamgantt, app.diagrams.net, visual-paradigm
 
 Milestone-uri:
 [MPS-milestones-gantt.pdf](https://github.com/anemonamaria/MPS_Project/files/9920464/MPS-milestones-gantt.pdf)
+
 [Diagrame de clase](https://drive.google.com/file/d/1395VvD9BoXqCl7jxCB1_evj9x7lliprz/view?usp=share_link)
