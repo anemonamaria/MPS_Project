@@ -34,3 +34,5 @@ Milestone-uri:
 [Diagrame de clase](https://drive.google.com/file/d/1395VvD9BoXqCl7jxCB1_evj9x7lliprz/view?usp=share_link)
 
 [WBS](https://drive.google.com/file/d/1roRcS0VKacWa3Yh9ANVsJMONHvb6q8bG/view?usp=sharing)
+
+[Trello](https://trello.com/invite/b/h7NjIzGM/ATTIe9131be989ffb7313e44c8beadc051255E6C4082/mps-project)
