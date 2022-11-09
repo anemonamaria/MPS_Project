@@ -16,6 +16,13 @@ Proiectul nostru isi propune prin folosirea pragurilor de binarizari locale si g
 sa genereze algoritmi. Astfel pe baza grafului vom obtine un algoritm care aplicat 
 pe setul de date va prezice un prag de binarizare optim.
 
+# Milestone 1
+
+În cadrul milestone-ului 1, au fost realizate task-uri în vederea organizării inițiale a proiectului. 
+Privind munca la nivel de echipă, pentru a putea împărți sarcinile între membrii și a evita conflictele în editare, se va folosi Github. Eventualele conflicte vor fi discutate și în meeting-uri săptămânale, urmărind metodologia Scrum.
+
+Planificarea următoarelor task-uri a fost făcută folosind teamgantt, prin care am și assignat cine ce va face.
+
 Limbaj de programare: C++
 Framework: STL
 
