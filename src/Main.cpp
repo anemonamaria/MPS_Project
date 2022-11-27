@@ -10,25 +10,21 @@
 #include <sstream>
 // Valoare pixel	Clasa pixel	Average threshold	Midrange threshold	White threshold	Bernsen threshold	Niblack threshold	Sauvola threshold	Wolf threshold	Phansalkar threshold	Nick threshold	Gaussian threshold
 
-class Pixel {
+// create abstract class for a generic pixel
+
+class GlobalPixel {
 private:
     double reference;
-    bool pixelClass;
     vector<double> thresholds;
 
 public:
-    Pixel(double reference, bool pixelClass, vector<double> thresholds) {
+    GlobalPixel(double reference, vector<double> thresholds) {
         this->reference = reference;
-        this->pixelClass = pixelClass;
         this->thresholds = std::move(thresholds);
     }
 
     double getReference() const {
         return reference;
-    }
-
-    bool getPixelClass() const {
-        return pixelClass;
     }
 
     vector<double> getThresholds() {
@@ -39,17 +35,31 @@ public:
         this->reference = value;
     }
 
-    void setPixelClass(bool value) {
-        this->pixelClass = value;
-    }
-
     void setThresholds(vector<double> value) {
         this->thresholds = std::move(value);
     }
 };
 
+// create a class LocalPixel extends GlobalPixel
+class LocalPixel : public GlobalPixel {
+private:
+    double pixelClass;
 
-int main() {
+public:
+    LocalPixel(double reference, vector<double> thresholds, double pixelClass) : GlobalPixel(reference, std::move(thresholds)) {
+        this->pixelClass = pixelClass;
+    }
+
+    double getPixelClass() const {
+        return pixelClass;
+    }
+
+    void setPixelClass(double value) {
+        this->pixelClass = value;
+    }
+};
+
+int parseLocal() {
     fstream file;
     file.open("input/mps-local/[DIBCO_2019]6.CSV", ios::in);
 
@@ -60,11 +70,11 @@ int main() {
 
     string line;
 
-    vector<Pixel> pixels;
+    vector<LocalPixel> pixels;
 
     while (file.peek() != EOF) {
         vector<double> thresholds = vector<double>();
-        Pixel pixel(0, false, thresholds);
+        LocalPixel pixel = LocalPixel(0, thresholds, 0);
 
         getline(file, line);
         if (line.empty()) {
@@ -112,4 +122,14 @@ int main() {
 
     file.close();
     return 0;
+}
+
+int parseGlobal() {
+    return 0;
+}
+
+int main() {
+    int result = parseLocal();
+    result &= parseGlobal();
+    return result;
 }
