@@ -46,7 +46,8 @@ private:
     double pixelClass;
 
 public:
-    LocalPixel(double reference, vector<double> thresholds, double pixelClass) : GlobalPixel(reference, std::move(thresholds)) {
+    LocalPixel(double reference, vector<double> thresholds, double pixelClass) : GlobalPixel(reference,
+                                                                                             std::move(thresholds)) {
         this->pixelClass = pixelClass;
     }
 
@@ -64,7 +65,7 @@ int parseLocal() {
     file.open("input/mps-local/[DIBCO_2019]6.CSV", ios::in);
 
     if (!file) {
-        cout << "Error opening file";
+        // cout << "Error opening file";
         return 1;
     }
 
@@ -87,37 +88,37 @@ int parseLocal() {
         size_t pos = 0;
         string token;
 
-        cout << "P: ";
+        // cout << "P: ";
 
         pos = line.find(delimiter); // find comma
         token = line.substr(0, pos);
         pixel.setReference(stod(token));
-        cout << "r: " << pixel.getReference() << " ";
+        // cout << "r: " << pixel.getReference() << " ";
         line.erase(0, pos + delimiter.length());
 
         pos = line.find(delimiter); // find comma
         token = line.substr(0, pos);
         pixel.setPixelClass(stoi(token));
-        cout << "c: " << pixel.getPixelClass() << " ";
+        // cout << "c: " << pixel.getPixelClass() << " ";
         line.erase(0, pos + delimiter.length());
 
-        cout << "thr: ";
+        // cout << "thr: ";
         while ((pos = line.find(delimiter)) != string::npos) {
             token = line.substr(0, pos);
 
             thresholds.push_back(stod(token));
-            cout << thresholds.back() << " ";
+            // cout << thresholds.back() << " ";
             line.erase(0, pos + delimiter.length());
         }
         // Last value has no comma afterwards
         token = line.substr(0, pos);
         thresholds.push_back(stod(token));
-        cout << thresholds.back() << " ";
+        // cout << thresholds.back() << " ";
         line.erase(0, pos + delimiter.length());
 
         pixel.setThresholds(thresholds);
         pixels.push_back(pixel);
-        cout << '\n';
+        // cout << '\n';
     }
 
     file.close();
@@ -125,11 +126,97 @@ int parseLocal() {
 }
 
 int parseGlobal() {
+    fstream file;
+    file.open("input/mps-global/[AVE_INT] 2_1.CSV", ios::in);
+
+    if (!file) {
+        cout << "Error opening file";
+        return 1;
+    }
+    string line;
+    GlobalPixel pixel = GlobalPixel(0, vector<double>());
+
+    // Read line of thresholds
+    getline(file, line);
+    if (line.empty()) {
+        return 1;
+    }
+
+    // split line by comma
+    string delimiter = ",";
+
+    size_t pos = 0;
+    string token;
+
+    cout << "P: ";
+
+    // todo move to function
+    pos = line.find(delimiter); // find comma
+    token = line.substr(0, pos);
+    pixel.setReference(stod(token));
+    cout << "r: " << pixel.getReference() << " ";
+
+    cout << "thr: ";
+    vector<double> thresholds = vector<double>();
+
+
+    while ((pos = line.find(delimiter)) != string::npos) {
+        token = line.substr(0, pos);
+
+        thresholds.push_back(stod(token));
+
+        cout << thresholds.back() << " ";
+        line.erase(0, pos + delimiter.length());
+    }
+    // Last value has no comma afterwards
+    token = line.substr(0, pos);
+    thresholds.push_back(stod(token));
+//    cout << thresholds.back() << " ";
+    line.erase(0, pos + delimiter.length());
+    pixel.setThresholds(thresholds);
+    cout << '\n';
+
+    vector<double> fMeasures = vector<double>();
+
+    // read next line
+    getline(file, line);
+    if (line.empty()) {
+        return 1;
+    }
+    cout << "F-measures: ";
+    while ((pos = line.find(delimiter)) != string::npos) {
+        token = line.substr(0, pos);
+
+        try {
+            fMeasures.push_back(stod(token));
+        }
+        catch (const std::invalid_argument &e) {
+            cout << "Invalid argument: " << e.what() << '\n';
+        }
+
+        cout << fMeasures.back() << " ";
+        line.erase(0, pos + delimiter.length());
+    }
+
+    if (!line.empty()) {
+        // Last value has no comma afterwards
+        token = line.substr(0, pos);
+        fMeasures.push_back(stod(token));
+        cout << fMeasures.back() << " ";
+        line.erase(0, pos + delimiter.length());
+    }
+
+
+    cout << '\n';
     return 0;
 }
 
 int main() {
+    // cout << "Local: \n\n";
     int result = parseLocal();
+
+    // cout << "Global: \n";
     result &= parseGlobal();
+
     return result;
 }
