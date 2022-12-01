@@ -33,34 +33,6 @@ public:
     virtual string toString();
 };
 
-class GlobalPixel : public Pixel {
-private:
-    vector<double> fMeasures;
-public:
-    GlobalPixel();
-
-    GlobalPixel(double reference, const vector<double> &thresholds, vector<double> fMeasures);
-
-    vector<double> getFMeasures();
-
-    void setFMeasures(vector<double> value);
-
-    string toString() override;
-};
-
-class LocalPixel : public Pixel {
-private:
-    double pixelClass;
-
-public:
-    LocalPixel(double reference, vector<double> thresholds, double pixelClass);
-
-    double getPixelClass() const;
-
-    void setPixelClass(double value);
-
-    string toString() override;
-};
 
 
 #endif //MPS_PROJECT_PIXEL_H
