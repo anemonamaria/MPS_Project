@@ -5,11 +5,13 @@
 #ifndef MPS_PROJECT_PIXEL_H
 #define MPS_PROJECT_PIXEL_H
 
+#include <cstring>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
-// Abstract class for a generic pixel
+// Abstract class for a generic globalPixel
 class Pixel {
 public:
     double reference;
@@ -17,7 +19,7 @@ public:
 
     double getReference() const;
 
-    vector<double> getThresholds();
+    vector<double> getThresholds() const;
 
     void setReference(double value);
 
@@ -27,6 +29,8 @@ public:
     Pixel();
 
     Pixel(double reference, vector<double> thresholds);
+
+    virtual string toString();
 };
 
 class GlobalPixel : public Pixel {
@@ -40,6 +44,8 @@ public:
     vector<double> getFMeasures();
 
     void setFMeasures(vector<double> value);
+
+    string toString() override;
 };
 
 class LocalPixel : public Pixel {
@@ -52,6 +58,8 @@ public:
     double getPixelClass() const;
 
     void setPixelClass(double value);
+
+    string toString() override;
 };
 
 

@@ -5,29 +5,22 @@
 #include <iostream>
 #include "Main.h"
 #include <fstream>
-#include <utility>
 #include <vector>
-#include <sstream>
 #include <cmath>
 #include "Pixel.h"
-// Valoare pixel	Clasa pixel	Average threshold	Midrange threshold	White threshold	Bernsen threshold	Niblack threshold	Sauvola threshold	Wolf threshold	Phansalkar threshold	Nick threshold	Gaussian threshold
+// Valoare globalPixel	Clasa globalPixel	Average threshold	Midrange threshold	White threshold	Bernsen threshold	Niblack threshold	Sauvola threshold	Wolf threshold	Phansalkar threshold	Nick threshold	Gaussian threshold
 
-vector<LocalPixel> pixels;
-
-int parseLocal() {
+int Main::parseLocal() {
     fstream file;
     file.open("input/mps-local/[DIBCO_2019]6.CSV", ios::in);
 
     if (!file) {
         return 1;
     }
-
     string line;
-
-
     while (file.peek() != EOF) {
         vector<double> thresholds = vector<double>();
-        LocalPixel pixel = LocalPixel(0, thresholds, 0);
+        LocalPixel localPixel = LocalPixel(0, thresholds, 0);
 
         getline(file, line);
         if (line.empty()) {
@@ -40,55 +33,45 @@ int parseLocal() {
         size_t pos = 0;
         string token;
 
-        // // cout << "P: ";
-
         pos = line.find(delimiter); // find comma
         token = line.substr(0, pos);
-        pixel.setReference(stod(token));
-        // // cout << "r: " << pixel.getReference() << " ";
+        localPixel.setReference(stod(token));
         line.erase(0, pos + delimiter.length());
 
         pos = line.find(delimiter); // find comma
         token = line.substr(0, pos);
-        pixel.setPixelClass(stoi(token));
-        // // cout << "c: " << pixel.getPixelClass() << " ";
+        localPixel.setPixelClass(stoi(token));
         line.erase(0, pos + delimiter.length());
 
-        // // cout << "thr: ";
         while ((pos = line.find(delimiter)) != string::npos) {
             token = line.substr(0, pos);
 
             thresholds.push_back(stod(token));
-            // // cout << thresholds.back() << " ";
             line.erase(0, pos + delimiter.length());
         }
         // Last value has no comma afterwards
         token = line.substr(0, pos);
         thresholds.push_back(stod(token));
-        // // cout << thresholds.back() << " ";
         line.erase(0, pos + delimiter.length());
 
-        pixel.setThresholds(thresholds);
-        pixels.push_back(pixel);
-        // // cout << '\n';
+        localPixel.setThresholds(thresholds);
+        pixels.push_back(localPixel);
     }
 
     file.close();
     return 0;
 }
 
-GlobalPixel pixel;
 
-int parseGlobal() {
+int Main::parseGlobal() {
     fstream file;
     file.open("input/mps-global/[AVE_INT] 2_1.CSV", ios::in);
 
     if (!file) {
-        // cout << "Error opening file";
         return 1;
     }
     string line;
-    pixel = GlobalPixel();
+    globalPixel = GlobalPixel();
 
     // Read line of thresholds
     getline(file, line);
@@ -102,15 +85,11 @@ int parseGlobal() {
     size_t pos = 0;
     string token;
 
-    // cout << "P: ";
-
     // todo move to function
     pos = line.find(delimiter); // find comma
     token = line.substr(0, pos);
-    pixel.setReference(stod(token));
-    // cout << "r: " << pixel.getReference() << " ";
+    globalPixel.setReference(stod(token));
 
-    // cout << "thr: ";
     vector<double> thresholds = vector<double>();
 
 
@@ -118,17 +97,13 @@ int parseGlobal() {
         token = line.substr(0, pos);
 
         thresholds.push_back(stod(token));
-
-        // cout << thresholds.back() << " ";
         line.erase(0, pos + delimiter.length());
     }
     // Last value has no comma afterwards
     token = line.substr(0, pos);
     thresholds.push_back(stod(token));
-//    // cout << thresholds.back() << " ";
     line.erase(0, pos + delimiter.length());
-    pixel.setThresholds(thresholds);
-    // cout << '\n';
+    globalPixel.setThresholds(thresholds);
 
     vector<double> fMeasures = vector<double>();
 
@@ -137,7 +112,6 @@ int parseGlobal() {
     if (line.empty()) {
         return 1;
     }
-    // cout << "F-measures: ";
     while ((pos = line.find(delimiter)) != string::npos) {
         token = line.substr(0, pos);
 
@@ -145,10 +119,8 @@ int parseGlobal() {
             fMeasures.push_back(stod(token));
         }
         catch (const std::invalid_argument &e) {
-            // cout << "Invalid argument: " << e.what() << '\n';
+            cout << "Invalid argument: " << e.what() << '\n';
         }
-
-        // cout << fMeasures.back() << " ";
         line.erase(0, pos + delimiter.length());
     }
 
@@ -156,28 +128,42 @@ int parseGlobal() {
         // Last value has no comma afterwards
         token = line.substr(0, pos);
         fMeasures.push_back(stod(token));
-        // cout << fMeasures.back() << " ";
         line.erase(0, pos + delimiter.length());
     }
-    pixel.setFMeasures(fMeasures);
+    globalPixel.setFMeasures(fMeasures);
 
     // cout << '\n';
     return 0;
 }
 
-double getFMeasure(double threshold) {
+double Main::getFMeasure(double threshold) {
     int idLine = (int) floor(threshold * 255);
-    return pixel.getFMeasures()[idLine];
+    return globalPixel.getFMeasures()[idLine];
+}
+
+void Main::printLocal() {
+    cout << "Local pixels - " << pixels.size() << ": \n";
+    for (auto & pixel : pixels) {
+        cout << pixel.toString() << '\n';
+    }
+    cout << "\n\n";
+}
+
+void Main::printGlobal() {
+    cout << "Global pixel: \n";
+    cout << globalPixel.toString() << '\n';
+    cout << "\n\n";
 }
 
 int main() {
-    // cout << "Local: \n\n";
-    int result = parseLocal();
+    Main main = Main();
+    int result = main.parseLocal();
+    result &= main.parseGlobal();
 
-    // cout << "Global: \n";
-    result &= parseGlobal();
+//    main.printLocal();
+//    main.printGlobal();
 
-    double fMeasure = getFMeasure(0.5);
+    double fMeasure = main.getFMeasure(0.5);
     cout << "F-measure: " << fMeasure << '\n';
 
     return result;
