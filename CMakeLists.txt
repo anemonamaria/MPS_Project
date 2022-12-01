@@ -7,4 +7,6 @@ include_directories(src)
 
 add_executable(MPS_Project
         src/Main.cpp
-        src/Main.h)
+        src/Main.h
+        src/Pixel.cpp
+        src/Pixel.h)
