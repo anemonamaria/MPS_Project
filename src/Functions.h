@@ -48,7 +48,7 @@ public:
 
     vector<Function> array = {arithmeticMean, minFunction, maxFunction, geometricMean, harmonicMean};
 
-
+    static void printFunction(const string &function, double a, double b, double result);
 };
 
 

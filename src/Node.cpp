@@ -2,6 +2,7 @@
 // Created by Bogdan on 03-Dec-22.
 //
 
+#include <random>
 #include "Node.h"
 
 Node::Node(Node *leftParent, Node *rightParent) {
@@ -12,7 +13,13 @@ Node::Node(Node *leftParent, Node *rightParent) {
     Functions functions;
     time_t timeVar;
     srand((unsigned) time(&timeVar));
-    function = functions.array[rand() % functions.array.size()];
+
+    // c++11 random
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0,  functions.array.size() - 1);
+
+    function = functions.array[dis(gen)];
 
     if (leftParent != nullptr && rightParent != nullptr) {
         value = function(leftParent->value, rightParent->value);

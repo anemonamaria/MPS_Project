@@ -163,18 +163,23 @@ void Parser::createTreeGlobal() {
     // Create random new node
     time_t timeVar;
     srand((unsigned) time(&timeVar));
-    Node *leftParent = treeGlobal[rand() % treeGlobal.size()];
-    Node *rightParent = treeGlobal[rand() % treeGlobal.size()];
 
-    Node *newNode = new Node(leftParent, rightParent);
 
-    // Add new node to tree
-    treeGlobal.push_back(newNode);
+    Node *newNode;
+
+    //  Generate 100 nodes
+    for (int i = 0 ; i < 100 ; ++i ) {
+        Node *leftParent = treeGlobal[rand() % treeGlobal.size()];
+        Node *rightParent = treeGlobal[rand() % treeGlobal.size()];
+        newNode = new Node(leftParent, rightParent);
+        treeGlobal.push_back(newNode);
+    }
 
     // Suppose newNode is the root of the tree
     printTree(newNode);
 }
 
+// todo
 void Parser::printTree(Node *node) {
     if (node == nullptr) {
         return;
@@ -186,6 +191,11 @@ void Parser::printTree(Node *node) {
 }
 
 int main() {
+    // Empty output file
+    ofstream file;
+    file.open("output.txt", ios::out | ios::trunc);
+    file.close();
+
     Parser main = Parser();
     int result = main.parseLocal(main.localPixels, "input/mps-local/[DIBCO_2019]6.CSV");
     result &= main.parseGlobal(main.globalPixel, "input/mps-global/[AVE_INT] 2_1.CSV");
