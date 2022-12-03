@@ -13,6 +13,7 @@
 #include "Pixel.h"
 #include "LocalPixel.h"
 #include "GlobalPixel.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -32,6 +33,10 @@ public:
     int parseLocal(vector<LocalPixel> &pixels, string filePath);
 
     int parseGlobal(GlobalPixel &globalPixel, string filePath);
+
+    void createTreeGlobal();
+
+    void printTree(Node *pNode);
 };
 
 

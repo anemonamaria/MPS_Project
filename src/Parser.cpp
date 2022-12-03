@@ -57,7 +57,6 @@ int Parser::parseLocal(vector<LocalPixel> &pixels, string filePath) {
     return 0;
 }
 
-
 int Parser::parseGlobal(GlobalPixel &globalPixel, string filePath) {
     fstream file;
     file.open(filePath, ios::in);
@@ -150,6 +149,42 @@ __attribute__((unused)) void Parser::printGlobal() {
     cout << "\n\n";
 }
 
+void Parser::createTreeGlobal() {
+    // Create intial nodes (leafs) from the thresholds of the global pixel
+    vector<double> thresholds = globalPixel.getThresholds();
+
+    vector <Node*> treeGlobal = vector<Node*>();
+
+    for (auto &threshold: thresholds) {
+        Node *node = new Node(threshold);
+        treeGlobal.push_back(node);
+    }
+
+    // Create random new node
+    time_t timeVar;
+    srand((unsigned) time(&timeVar));
+    Node *leftParent = treeGlobal[rand() % treeGlobal.size()];
+    Node *rightParent = treeGlobal[rand() % treeGlobal.size()];
+
+    Node *newNode = new Node(leftParent, rightParent);
+
+    // Add new node to tree
+    treeGlobal.push_back(newNode);
+
+    // Suppose newNode is the root of the tree
+    printTree(newNode);
+}
+
+void Parser::printTree(Node *node) {
+    if (node == nullptr) {
+        return;
+    }
+
+    if (node->leftParent == nullptr && node->rightParent == nullptr) {
+    }
+
+}
+
 int main() {
     Parser main = Parser();
     int result = main.parseLocal(main.localPixels, "input/mps-local/[DIBCO_2019]6.CSV");
@@ -157,6 +192,8 @@ int main() {
 
     main.printLocal();
     main.printGlobal();
+
+    main.createTreeGlobal();
 
     double fMeasure = main.getFMeasure(0.5);
     cout << "F-measure: " << fMeasure << '\n';
