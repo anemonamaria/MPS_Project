@@ -12,8 +12,10 @@ class Node {
 public:
     Node *leftParent;
     Node *rightParent;
-    double value;
-    Function function;
+    double threshold;
+    Function function{};
+    string functionName;
+    string identifier;
 
     Node();
 

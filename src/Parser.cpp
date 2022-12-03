@@ -44,7 +44,7 @@ int Parser::parseLocal(vector<LocalPixel> &pixels, string filePath) {
             thresholds.push_back(stod(token));
             line.erase(0, pos + delimiter.length());
         }
-        // Last value has no comma afterwards
+        // Last threshold has no comma afterwards
         token = line.substr(0, pos);
         thresholds.push_back(stod(token));
         line.erase(0, pos + delimiter.length());
@@ -93,7 +93,7 @@ int Parser::parseGlobal(GlobalPixel &globalPixel, string filePath) {
         thresholds.push_back(stod(token));
         line.erase(0, pos + delimiter.length());
     }
-    // Last value has no comma afterwards
+    // Last threshold has no comma afterwards
     token = line.substr(0, pos);
     thresholds.push_back(stod(token));
     line.erase(0, pos + delimiter.length());
@@ -119,7 +119,7 @@ int Parser::parseGlobal(GlobalPixel &globalPixel, string filePath) {
     }
 
     if (!line.empty()) {
-        // Last value has no comma afterwards
+        // Last threshold has no comma afterwards
         token = line.substr(0, pos);
         fMeasures.push_back(stod(token));
         line.erase(0, pos + delimiter.length());
@@ -149,15 +149,18 @@ __attribute__((unused)) void Parser::printGlobal() {
     cout << "\n\n";
 }
 
-void Parser::createTreeGlobal() {
+string Parser::createFunctionChainGlobal() {
     // Create intial nodes (leafs) from the thresholds of the global pixel
     vector<double> thresholds = globalPixel.getThresholds();
 
-    vector <Node*> treeGlobal = vector<Node*>();
+    vector<Node *> treeGlobal = vector<Node *>();
 
+    int index = 0;
     for (auto &threshold: thresholds) {
         Node *node = new Node(threshold);
+        node->identifier = "thresholds[" + to_string(index) + "]";
         treeGlobal.push_back(node);
+        index++;
     }
 
     // Create random new node
@@ -168,32 +171,64 @@ void Parser::createTreeGlobal() {
     Node *newNode;
 
     //  Generate 100 nodes
-    for (int i = 0 ; i < 100 ; ++i ) {
+    while (true) {
         Node *leftParent = treeGlobal[rand() % treeGlobal.size()];
         Node *rightParent = treeGlobal[rand() % treeGlobal.size()];
         newNode = new Node(leftParent, rightParent);
+
+        double fMeasure = getFMeasure(newNode->threshold);
+
         treeGlobal.push_back(newNode);
+
+        if (fMeasure > 99.99) {
+            // This node is root
+            cout << "Root node: " << newNode->threshold << " with fMeasure: " << fMeasure << '\n';
+            break;
+        }
     }
 
-    // Suppose newNode is the root of the tree
-    printTree(newNode);
+    //  newNode is the root of the tree
+    string functionChain = printTree(newNode);
+    return functionChain;
 }
 
 // todo
-void Parser::printTree(Node *node) {
+string Parser::printTree(Node *node) {
     if (node == nullptr) {
-        return;
+        return "";
     }
 
-    if (node->leftParent == nullptr && node->rightParent == nullptr) {
+    if (node->leftParent == nullptr || node->rightParent == nullptr) {
+//        return to_string(node->threshold);
+        return node->identifier;
     }
 
+    string left = printTree(node->leftParent);
+    string right = printTree(node->rightParent);
+
+    string functionString = node->functionName;
+
+    return functionString + "(" + left + ", " + right + ")";
 }
 
 int main() {
-    // Empty output file
+    // Fill output file with defines for functions
     ofstream file;
-    file.open("output.txt", ios::out | ios::trunc);
+    file.open("output/output.txt");
+    file << "#define arithmeticMean(x, y) ((x + y) / 2)\n";
+    file << "#define geometricMean(x, y) (sqrt(x * y))\n";
+    file << "#define harmonicMean(x, y) (2 / ((1 / x) + (1 / y)))\n";
+    file << "#define minFunction(x, y) (min(x, y))\n"; // or operator conditional
+    file << "#define maxFunction(x, y) (max(x, y))\n"; // or operator conditional
+    file << "#include <vector>\n";
+    file << "using namespace std;\n";
+
+    file << "\ndouble binarization(vector <double> thresholds){\n";
+
+    if (!file) {
+        exit(1);
+    }
+
     file.close();
 
     Parser main = Parser();
@@ -203,10 +238,13 @@ int main() {
     main.printLocal();
     main.printGlobal();
 
-    main.createTreeGlobal();
+    string functionChainGlobal = main.createFunctionChainGlobal();
 
-    double fMeasure = main.getFMeasure(0.5);
-    cout << "F-measure: " << fMeasure << '\n';
+    // Append to output file
+    file.open("output/output.txt", ios::app);
+    file << "\nreturn " << functionChainGlobal << ";\n}\n";
+    file.close();
+
 
     return result;
 }

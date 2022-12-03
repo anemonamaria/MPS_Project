@@ -17,22 +17,22 @@ Node::Node(Node *leftParent, Node *rightParent) {
     // c++11 random
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0,  functions.array.size() - 1);
+    std::uniform_int_distribution<> dis(0, functions.array.size() - 1);
 
-    function = functions.array[dis(gen)];
+    int functionIndex = dis(gen);
+    function = functions.array[functionIndex];
+    functionName = functions.names[functionIndex];
+    identifier = "";
 
     if (leftParent != nullptr && rightParent != nullptr) {
-        value = function(leftParent->value, rightParent->value);
+        threshold = function(leftParent->threshold, rightParent->threshold);
     }
 }
 
 Node::Node() : Node(nullptr, nullptr) {}
 
-Node::Node(double value) {
-    this->value = value;
-    leftParent = nullptr;
-    rightParent = nullptr;
-
+Node::Node(double value) : Node(nullptr, nullptr) {
+    this->threshold = value;
 }
 
 // 1/ (1/(....)

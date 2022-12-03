@@ -1,0 +1,12 @@
+#define arithmeticMean(x, y) ((x + y) / 2)
+#define geometricMean(x, y) (sqrt(x * y))
+#define harmonicMean(x, y) (2 / ((1 / x) + (1 / y)))
+#define minFunction(x, y) (min(x, y))
+#define maxFunction(x, y) (max(x, y))
+#include <vector>
+using namespace std;
+
+double binarization(vector <double> thresholds){
+
+return minFunction(thresholds[3], maxFunction(thresholds[8], thresholds[11]));
+}

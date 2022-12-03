@@ -31,7 +31,7 @@ using namespace std;
 typedef double(*Function)(double, double);
 //class  Opperation {
 //    string operationstring;
-//    double value;
+//    double threshold;
 //};        string operatie ="(" + operationstring + " + " + b +  ")/2";
 
 class Functions {
@@ -47,6 +47,8 @@ public:
     static double harmonicMean(double a, double b);
 
     vector<Function> array = {arithmeticMean, minFunction, maxFunction, geometricMean, harmonicMean};
+
+    vector<string> names = {"arithmeticMean", "minFunction", "maxFunction", "geometricMean", "harmonicMean"};
 
     static void printFunction(const string &function, double a, double b, double result);
 };

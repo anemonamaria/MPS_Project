@@ -34,9 +34,9 @@ public:
 
     int parseGlobal(GlobalPixel &globalPixel, string filePath);
 
-    void createTreeGlobal();
+    string createFunctionChainGlobal();
 
-    void printTree(Node *pNode);
+    string printTree(Node *pNode);
 };
 
 

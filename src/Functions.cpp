@@ -7,7 +7,7 @@
 
 void Functions::printFunction(const string &function, double a, double b, double result) {
     fstream file;
-    file.open("output.txt", ios::app);
+    file.open("output/output.txt", ios::app);
 
     if (!file) {
         exit(1);
@@ -17,9 +17,9 @@ void Functions::printFunction(const string &function, double a, double b, double
 
 double Functions::arithmeticMean(double a, double b) {
     double result = (a + b) / 2;
-    printFunction(__FUNCTION__, a, b, result);
-    cout << __FUNCTION__ << " " << a << " " << b << '\n';
-    cout << result << '\n';
+//    printFunction(__FUNCTION__, a, b, result);
+//    cout << __FUNCTION__ << " " << a << " " << b << '\n';
+//    cout << result << '\n';
     return result;
 }
 
@@ -49,9 +49,9 @@ double Functions::geometricMean(double a, double b) {
 
 double Functions::harmonicMean(double a, double b) {
     double result = 2 / (1 / a + 1 / b);
-    printFunction(__FUNCTION__, a, b, result);
-    cout << __FUNCTION__ << " " << a << " " << b << '\n';
-    cout << result << '\n';
+//    printFunction(__FUNCTION__, a, b, result);
+//    cout << __FUNCTION__ << " " << a << " " << b << '\n';
+//    cout << result << '\n';
     return result;
 }
 
