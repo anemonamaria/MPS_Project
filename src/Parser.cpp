@@ -220,10 +220,12 @@ int main() {
     file << "#define harmonicMean(x, y) (2 / ((1 / x) + (1 / y)))\n";
     file << "#define minFunction(x, y) (min(x, y))\n"; // or operator conditional
     file << "#define maxFunction(x, y) (max(x, y))\n"; // or operator conditional
-    file << "#include <vector>\n";
     file << "using namespace std;\n";
+//    file << "#include <vector>\n";
 
-    file << "\ndouble binarization(vector <double> thresholds){\n";
+//    file << "\ndouble binarization(vector <double> thresholds){\n";
+
+    file << "\ndouble binarization(double* thresholds){\n";
 
     if (!file) {
         exit(1);
