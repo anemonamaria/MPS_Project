@@ -7,7 +7,7 @@
 
 void Functions::printFunction(const string &function, double a, double b, double result) {
     fstream file;
-    file.open("output/output.txt", ios::app);
+    file.open("output/global_output.cpp", ios::app);
 
     if (!file) {
         exit(1);

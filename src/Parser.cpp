@@ -192,38 +192,32 @@ string Parser::createFunctionChainGlobal() {
     return functionChain;
 }
 
-// todo
 string Parser::printTree(Node *node) {
     if (node == nullptr) {
         return "";
     }
 
     if (node->leftParent == nullptr || node->rightParent == nullptr) {
-//        return to_string(node->threshold);
         return node->identifier;
     }
-
     string left = printTree(node->leftParent);
     string right = printTree(node->rightParent);
-
     string functionString = node->functionName;
-
     return functionString + "(" + left + ", " + right + ")";
 }
 
 int main() {
     // Fill output file with defines for functions
     ofstream file;
-    file.open("output/output.txt");
+    file.open("output/global_output.cpp");
+    file << "#include <algorithm>\n";
+    file << "#include <cmath>\n";
     file << "#define arithmeticMean(x, y) ((x + y) / 2)\n";
     file << "#define geometricMean(x, y) (sqrt(x * y))\n";
     file << "#define harmonicMean(x, y) (2 / ((1 / x) + (1 / y)))\n";
-    file << "#define minFunction(x, y) (min(x, y))\n"; // or operator conditional
-    file << "#define maxFunction(x, y) (max(x, y))\n"; // or operator conditional
+    file << "#define minFunction(x, y) (min(x, y))\n";
+    file << "#define maxFunction(x, y) (max(x, y))\n";
     file << "using namespace std;\n";
-//    file << "#include <vector>\n";
-
-//    file << "\ndouble binarization(vector <double> thresholds){\n";
 
     file << "\ndouble binarization(double* thresholds){\n";
 
@@ -243,10 +237,9 @@ int main() {
     string functionChainGlobal = main.createFunctionChainGlobal();
 
     // Append to output file
-    file.open("output/output.txt", ios::app);
-    file << "\nreturn " << functionChainGlobal << ";\n}\n";
+    file.open("output/global_output.cpp", ios::app);
+    file << "\treturn " << functionChainGlobal << ";\n}\n";
     file.close();
-
 
     return result;
 }
