@@ -130,7 +130,7 @@ int Parser::parseGlobal(GlobalPixel &globalPixel, string filePath) {
     return 0;
 }
 
-double Parser::getFMeasure(double threshold) {
+double Parser::getFMeasureGlobal(double threshold) {
     int idLine = (int) floor(threshold * 255);
     return globalPixel.getFMeasures()[idLine];
 }
@@ -167,16 +167,15 @@ string Parser::createFunctionChainGlobal() {
     time_t timeVar;
     srand((unsigned) time(&timeVar));
 
-
     Node *newNode;
 
-    //  Generate 100 nodes
+    // Generate nodes until fMeasure is bigger than desired value
     while (true) {
         Node *leftParent = treeGlobal[rand() % treeGlobal.size()];
         Node *rightParent = treeGlobal[rand() % treeGlobal.size()];
         newNode = new Node(leftParent, rightParent);
 
-        double fMeasure = getFMeasure(newNode->threshold);
+        double fMeasure = getFMeasureGlobal(newNode->threshold);
 
         treeGlobal.push_back(newNode);
 
@@ -205,6 +204,82 @@ string Parser::printTree(Node *node) {
     string functionString = node->functionName;
     return functionString + "(" + left + ", " + right + ")";
 }
+
+double getFMeasureLocal(int noTruePositives, int noFalsePositives, int noTrueNegatives, int noFalseNegatives) {
+    double numerator = noTruePositives;
+    double denominator = noTruePositives + 0.5 * (noFalsePositives + noFalseNegatives);
+    return numerator / denominator;
+}
+
+string Parser::createFunctionChainLocal() {
+
+    int noTruePositives = 0, noFalsePositives = 0, noFalseNegatives = 0, noTrueNegatives = 0;
+    for (auto &localPixel: localPixels) {
+        cout << "\nLocal pixel:\n";
+
+        // Create intial nodes (leafs) from the thresholds of the global pixel
+        vector<double> thresholds = localPixel.getThresholds();
+
+        vector<Node *> treeLocal = vector<Node *>();
+
+        int index = 0;
+        for (auto &threshold: thresholds) {
+            Node *node = new Node(threshold);
+            node->identifier = "thresholds[" + to_string(index) + "]";
+            treeLocal.push_back(node);
+            index++;
+        }
+
+        // Create random new node
+        time_t timeVar;
+        srand((unsigned) time(&timeVar));
+
+        Node *newNode;
+
+        // Generate 100 nodes
+        int idNewNode = 0;
+        while (idNewNode < 100) {
+            Node *leftParent = treeLocal[rand() % treeLocal.size()];
+            Node *rightParent = treeLocal[rand() % treeLocal.size()];
+            newNode = new Node(leftParent, rightParent);
+            treeLocal.push_back(newNode);
+            ++idNewNode;
+        }
+
+        // Calculate which pixels are true/false positive/negative
+        for (auto &threshold: thresholds) {
+            if (threshold < localPixel.getReference()) {
+                // White
+                if (localPixel.getPixelClass() == 0) {
+                    // True positive
+                    ++noTruePositives;
+                    cout << "TP ";
+                } else {
+                    // False positive
+                    ++noFalsePositives;
+                    cout << "FP ";
+                }
+            } else {
+                // Black
+                if (localPixel.getPixelClass() == 1) {
+                    // True negative
+                    ++noTrueNegatives;
+                    cout << "TN ";
+                } else {
+                    // False negative
+                    ++noFalseNegatives;
+                    cout << "FN ";
+                }
+            }
+        }
+    }
+
+    cout << "\nFound " << noTruePositives << " true positives, " << noFalsePositives << " false positives, "
+         << noTrueNegatives << " true negatives and " << noFalseNegatives << " false negatives.\n";
+
+    return "";
+}
+
 
 int main() {
     // Fill output file with defines for functions
@@ -235,6 +310,7 @@ int main() {
     main.printGlobal();
 
     string functionChainGlobal = main.createFunctionChainGlobal();
+    string functionChainLocal = main.createFunctionChainLocal();
 
     // Append to output file
     file.open("output/global_output.cpp", ios::app);

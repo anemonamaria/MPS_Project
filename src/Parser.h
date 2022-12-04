@@ -23,7 +23,7 @@ public:
     GlobalPixel globalPixel;
     static std::ostringstream out;
 
-    double getFMeasure(double threshold);
+    double getFMeasureGlobal(double threshold);
 
     // The printing functions are only used for debugging purposes, and are therefore marked as unused
     __attribute__((unused)) void printLocal();
@@ -37,6 +37,8 @@ public:
     string createFunctionChainGlobal();
 
     string printTree(Node *pNode);
+
+    string createFunctionChainLocal();
 };
 
 
