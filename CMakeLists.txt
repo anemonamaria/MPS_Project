@@ -13,4 +13,4 @@ add_executable(MPS_Project
         src/LocalPixel.cpp
         src/LocalPixel.h
         src/GlobalPixel.cpp
-        src/GlobalPixel.h src/Node.cpp src/Node.h src/Functions.cpp src/Functions.h src/test.cpp)
+        src/GlobalPixel.h src/Node.cpp src/Node.h src/Functions.cpp src/Functions.h)

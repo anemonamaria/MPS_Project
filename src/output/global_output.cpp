@@ -8,5 +8,5 @@
 using namespace std;
 
 double binarization(double* thresholds){
-	return minFunction(geometricMean(thresholds[14], thresholds[11]), thresholds[3]);
+	return minFunction(thresholds[0], thresholds[3]);
 }
