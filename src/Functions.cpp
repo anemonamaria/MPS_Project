@@ -25,25 +25,25 @@ double Functions::arithmeticMean(double a, double b) {
 
 double Functions::minFunction(double a, double b) {
     double result = min(a, b);
-    printFunction(__FUNCTION__, a, b, result);
-    cout << __FUNCTION__ << " " << a << " " << b << '\n';
-    cout << result << '\n';
+//    printFunction(__FUNCTION__, a, b, result);
+//    cout << __FUNCTION__ << " " << a << " " << b << '\n';
+//    cout << result << '\n';
     return result;
 }
 
 double Functions::maxFunction(double a, double b) {
     double result = max(a, b);
-    printFunction(__FUNCTION__, a, b, result);
-    cout << __FUNCTION__ << " " << a << " " << b << '\n';
-    cout << result << '\n';
+//    printFunction(__FUNCTION__, a, b, result);
+//    cout << __FUNCTION__ << " " << a << " " << b << '\n';
+//    cout << result << '\n';
     return result;
 }
 
 double Functions::geometricMean(double a, double b) {
     double result = sqrt(a * b);
-    printFunction(__FUNCTION__, a, b, result);
-    cout << __FUNCTION__ << " " << a << " " << b << '\n';
-    cout << result << '\n';
+//    printFunction(__FUNCTION__, a, b, result);
+//    cout << __FUNCTION__ << " " << a << " " << b << '\n';
+//    cout << result << '\n';
     return result;
 }
 
