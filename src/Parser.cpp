@@ -205,7 +205,7 @@ string Parser::printTree(Node *node) {
     return functionString + "(" + left + ", " + right + ")";
 }
 
-double getFMeasureLocal(int noTruePositives, int noFalsePositives, int noTrueNegatives, int noFalseNegatives) {
+__attribute__((unused)) double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int noTrueNegatives, int noFalseNegatives) {
     double numerator = noTruePositives;
     double denominator = noTruePositives + 0.5 * (noFalsePositives + noFalseNegatives);
     return numerator / denominator;
