@@ -6,7 +6,7 @@ Moraru Anemona-Maria 		342C5 - rol TESTER
 
 Piele Bogdan-Gabriel 		342C5 - rol DEVELOPER
 
-Sneapota Cristian-Alexandru 	342C5 - rol PROJECT MANAEGR
+Sneapota Cristian-Alexandru 	342C5 - rol PROJECT MANAGER
 
 Visan Adrian-Mihai 		341C4 - rol DEVELOPER
 
