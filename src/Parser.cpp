@@ -168,6 +168,14 @@ string Parser::createFunctionChainGlobal() {
     srand((unsigned) time(&timeVar));
 
     Node *newNode;
+    double limit = 0;
+    for (const auto &item: globalPixel.getFMeasures()) {
+        if (item > limit) {
+            limit = item;
+        }
+    }
+    limit -= 15;
+    cout << "Trying to find a node with fMeasure > " << limit << '\n';
 
     // Generate nodes until fMeasure is bigger than desired value
     while (true) {
@@ -179,7 +187,9 @@ string Parser::createFunctionChainGlobal() {
 
         treeGlobal.push_back(newNode);
 
-        if (fMeasure > 99.99) {
+        // get maximum of the fMeasures and minus 5
+
+        if (fMeasure > limit) {
             // This node is root
             cout << "Root node: " << newNode->threshold << " with fMeasure: " << fMeasure << '\n';
             break;
@@ -205,7 +215,7 @@ string Parser::printTree(Node *node) {
     return functionString + "(" + left + ", " + right + ")";
 }
 
-__attribute__((unused)) double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int noTrueNegatives, int noFalseNegatives) {
+double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int noTrueNegatives, int noFalseNegatives) {
     double numerator = noTruePositives;
     double denominator = noTruePositives + 0.5 * (noFalsePositives + noFalseNegatives);
     return numerator / denominator;
@@ -282,40 +292,79 @@ string Parser::createFunctionChainLocal() {
 
 
 int main() {
-    // Fill output file with defines for functions
-    ofstream file;
-    file.open("output/global_output.cpp");
-    file << "#include <algorithm>\n";
-    file << "#include <cmath>\n";
-    file << "#define arithmeticMean(x, y) ((x + y) / 2)\n";
-    file << "#define geometricMean(x, y) (sqrt(x * y))\n";
-    file << "#define harmonicMean(x, y) (2 / ((1 / x) + (1 / y)))\n";
-    file << "#define minFunction(x, y) (min(x, y))\n";
-    file << "#define maxFunction(x, y) (max(x, y))\n";
-    file << "using namespace std;\n";
+    // Fill output with defines for functions
 
-    file << "\ndouble binarization(double* thresholds){\n";
+    std::string outputFileInitialContent;
+    outputFileInitialContent += "#include <algorithm>\n";
+    outputFileInitialContent += "#include <cmath>\n";
+    outputFileInitialContent += "#define arithmeticMean(x, y) ((x + y) / 2)\n";
+    outputFileInitialContent += "#define geometricMean(x, y) (sqrt(x * y))\n";
+    outputFileInitialContent += "#define harmonicMean(x, y) (2 / ((1 / x) + (1 / y)))\n";
+    outputFileInitialContent += "#define minFunction(x, y) (min(x, y))\n";
+    outputFileInitialContent += "#define maxFunction(x, y) (max(x, y))\n";
+    outputFileInitialContent += "using namespace std;\n";
+    outputFileInitialContent += "\ndouble binarization(double* thresholds){\n";
 
-    if (!file) {
+    // get all csv inputFiles in the directory from inputFiles.txt
+    ifstream inputFiles;
+    inputFiles.open("input/mps-global/input_files.txt");
+    if (!inputFiles) {
         exit(1);
     }
+    int result = 0;
 
-    file.close();
+    while (!inputFiles.eof()) {
+        string inputFile;
+        getline(inputFiles, inputFile);
+        if (inputFile.empty()) {
+            continue;
+        }
+        if (inputFile.find(".CSV") == string::npos && inputFile.find(".csv") == string::npos) {
+            continue;
+        }
 
-    Parser main = Parser();
-    int result = main.parseLocal(main.localPixels, "input/mps-local/[DIBCO_2019]6.CSV");
-    result &= main.parseGlobal(main.globalPixel, "input/mps-global/[AVE_INT] 2_1.CSV");
+        cout << "Parsing " << inputFile << "\n";
 
-    main.printLocal();
-    main.printGlobal();
+        Parser main = Parser();
 
-    string functionChainGlobal = main.createFunctionChainGlobal();
-    string functionChainLocal = main.createFunctionChainLocal();
 
-    // Append to output file
-    file.open("output/global_output.cpp", ios::app);
-    file << "\treturn " << functionChainGlobal << ";\n}\n";
-    file.close();
+//    result = main.parseLocal(main.localPixels, "input/mps-local/[DIBCO_2019]6.CSV");
+
+        // run the function and wait for 15 seconds, if it takes longer, kill it
+
+        result &= main.parseGlobal(main.globalPixel, "input/mps-global/" + inputFile);
+
+//    main.printLocal();
+        main.printGlobal();
+
+        string functionChainGlobal = main.createFunctionChainGlobal();
+//    string functionChainLocal = main.createFunctionChainLocal();
+
+        // Append to output
+
+        string outputPath = "output/mps-global/";
+        outputPath += "global_output_" + inputFile;
+        outputPath = outputPath.substr(0, outputPath.find_last_of('.')) + ".cpp"; // replace .csv with .cpp
+        // remove spaces
+        outputPath.erase(remove(outputPath.begin(), outputPath.end(), ' '), outputPath.end());
+        ofstream output;
+
+        cout << "Writing to " << outputPath << "\n";
+        output.open(outputPath, fstream::out);
+
+        if (!output) {
+            cout << "Could not open output file " << outputPath << "\n";
+            exit(1);
+        }
+        output << outputFileInitialContent;
+
+        output << "\treturn " << functionChainGlobal << ";\n}\n";
+        output.close();
+
+        cout << "----------------------------------------\n";
+    }
 
     return result;
+
+
 }
