@@ -154,12 +154,14 @@ string Parser::createFunctionChainGlobal() {
     vector<double> thresholds = globalPixel.getThresholds();
 
     vector<Node *> treeGlobal = vector<Node *>();
+    vector<Node *> initialTreeGlobal = vector<Node *>();
 
     int index = 0;
     for (auto &threshold: thresholds) {
         Node *node = new Node(threshold);
         node->identifier = "thresholds[" + to_string(index) + "]";
         treeGlobal.push_back(node);
+        initialTreeGlobal.push_back(node);
         index++;
     }
 
@@ -178,7 +180,17 @@ string Parser::createFunctionChainGlobal() {
     cout << "Trying to find a node with fMeasure > " << limit << '\n';
 
     // Generate nodes until fMeasure is bigger than desired value
-    while (true) {
+    int noRemainingRetries = 10;
+    while (noRemainingRetries > 0) {
+        if (treeGlobal.size() > 1000) {
+            cout << "Too many nodes, retrying\n";
+            treeGlobal.erase(treeGlobal.begin(), treeGlobal.end());
+            for (auto &node: initialTreeGlobal) {
+                treeGlobal.push_back(node);
+            }
+            cout << "Remaining retries: " << --noRemainingRetries << '\n';
+        }
+
         Node *leftParent = treeGlobal[rand() % treeGlobal.size()];
         Node *rightParent = treeGlobal[rand() % treeGlobal.size()];
         newNode = new Node(leftParent, rightParent);
@@ -335,7 +347,7 @@ int main() {
         result &= main.parseGlobal(main.globalPixel, "input/mps-global/" + inputFile);
 
 //    main.printLocal();
-        main.printGlobal();
+//        main.printGlobal();
 
         string functionChainGlobal = main.createFunctionChainGlobal();
 //    string functionChainLocal = main.createFunctionChainLocal();
