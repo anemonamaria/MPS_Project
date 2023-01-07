@@ -5,6 +5,8 @@
 
 // Valoare globalPixel	Clasa globalPixel	Average threshold	Midrange threshold	White threshold	Bernsen threshold	Niblack threshold	Sauvola threshold	Wolf threshold	Phansalkar threshold	Nick threshold	Gaussian threshold
 
+int mainType(bool global);
+
 int Parser::parseLocal(vector<LocalPixel> &pixels, string filePath) {
     fstream file;
     file.open(filePath, ios::in);
@@ -234,12 +236,13 @@ double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int n
 }
 
 string Parser::createFunctionChainLocal() {
-
     int noTruePositives = 0, noFalsePositives = 0, noFalseNegatives = 0, noTrueNegatives = 0;
+    double fMeasureLocalAverage = 0;
+    string functionChain = "";
     for (auto &localPixel: localPixels) {
-        cout << "\nLocal pixel:\n";
+//        cout << "\nLocal pixel:\n";
 
-        // Create intial nodes (leafs) from the thresholds of the global pixel
+        // Create initial nodes (leafs) from the thresholds of the global pixel
         vector<double> thresholds = localPixel.getThresholds();
 
         vector<Node *> treeLocal = vector<Node *>();
@@ -265,47 +268,55 @@ string Parser::createFunctionChainLocal() {
             Node *rightParent = treeLocal[rand() % treeLocal.size()];
             newNode = new Node(leftParent, rightParent);
             treeLocal.push_back(newNode);
+            thresholds.push_back(newNode->threshold);
             ++idNewNode;
         }
 
         // Calculate which pixels are true/false positive/negative
+
         for (auto &threshold: thresholds) {
             if (threshold < localPixel.getReference()) {
                 // White
                 if (localPixel.getPixelClass() == 0) {
                     // True positive
                     ++noTruePositives;
-                    cout << "TP ";
+//                    cout << "TP ";
                 } else {
                     // False positive
                     ++noFalsePositives;
-                    cout << "FP ";
+//                    cout << "FP ";
                 }
             } else {
                 // Black
                 if (localPixel.getPixelClass() == 1) {
                     // True negative
                     ++noTrueNegatives;
-                    cout << "TN ";
+//                    cout << "TN ";
                 } else {
                     // False negative
                     ++noFalseNegatives;
-                    cout << "FN ";
+//                    cout << "FN ";
                 }
             }
         }
+        double fMeasureLocal = getFMeasureLocal(
+                noTruePositives,
+                noFalsePositives,
+                noTrueNegatives,
+                noFalseNegatives
+        );
+        fMeasureLocalAverage += fMeasureLocal;
+        functionChain = printTree(newNode);
     }
 
-    cout << "\nFound " << noTruePositives << " true positives, " << noFalsePositives << " false positives, "
-         << noTrueNegatives << " true negatives and " << noFalseNegatives << " false negatives.\n";
-
-    return "";
+    fMeasureLocalAverage /= (double)localPixels.size();
+    cout << "Average fMeasure local: " << fMeasureLocalAverage << '\n';
+    return functionChain;
 }
 
 
-int main() {
+int mainType(bool isGlobal) {
     // Fill output with defines for functions
-
     std::string outputFileInitialContent;
     outputFileInitialContent += "#include <algorithm>\n";
     outputFileInitialContent += "#include <cmath>\n";
@@ -316,67 +327,109 @@ int main() {
     outputFileInitialContent += "#define maxFunction(x, y) (max(x, y))\n";
     outputFileInitialContent += "using namespace std;\n";
     outputFileInitialContent += "\ndouble binarization(double* thresholds){\n";
-
-    // get all csv inputFiles in the directory from inputFiles.txt
     ifstream inputFiles;
-    inputFiles.open("input/mps-global/input_files.txt");
-    if (!inputFiles) {
-        exit(1);
-    }
     int result = 0;
 
-    while (!inputFiles.eof()) {
-        string inputFile;
-        getline(inputFiles, inputFile);
-        if (inputFile.empty()) {
-            continue;
-        }
-        if (inputFile.find(".CSV") == string::npos && inputFile.find(".csv") == string::npos) {
-            continue;
-        }
-
-        cout << "Parsing " << inputFile << "\n";
-
-        Parser main = Parser();
-
-
-//    result = main.parseLocal(main.localPixels, "input/mps-local/[DIBCO_2019]6.CSV");
-
-        // run the function and wait for 15 seconds, if it takes longer, kill it
-
-        result &= main.parseGlobal(main.globalPixel, "input/mps-global/" + inputFile);
-
-//    main.printLocal();
-//        main.printGlobal();
-
-        string functionChainGlobal = main.createFunctionChainGlobal();
-//    string functionChainLocal = main.createFunctionChainLocal();
-
-        // Append to output
-
-        string outputPath = "output/mps-global/";
-        outputPath += "global_output_" + inputFile;
-        outputPath = outputPath.substr(0, outputPath.find_last_of('.')) + ".cpp"; // replace .csv with .cpp
-        // remove spaces
-        outputPath.erase(remove(outputPath.begin(), outputPath.end(), ' '), outputPath.end());
-        ofstream output;
-
-        cout << "Writing to " << outputPath << "\n";
-        output.open(outputPath, fstream::out);
-
-        if (!output) {
-            cout << "Could not open output file " << outputPath << "\n";
+    if (isGlobal) {
+        // get all csv inputFiles in the directory from inputFiles.txt
+        inputFiles.open("input/mps-global/input_files.txt");
+        if (!inputFiles) {
             exit(1);
         }
-        output << outputFileInitialContent;
 
-        output << "\treturn " << functionChainGlobal << ";\n}\n";
-        output.close();
+        while (!inputFiles.eof()) {
+            string inputFile;
+            getline(inputFiles, inputFile);
+            if (inputFile.empty()) {
+                continue;
+            }
+            if (inputFile.find(".CSV") == string::npos && inputFile.find(".csv") == string::npos) {
+                continue;
+            }
 
-        cout << "----------------------------------------\n";
+            cout << "Parsing " << inputFile << "\n";
+
+            Parser main = Parser();
+
+            result &= main.parseGlobal(main.globalPixel, "input/mps-global/" + inputFile);
+
+            string functionChainGlobal = main.createFunctionChainGlobal();
+
+            // Append to output
+            string outputPath = "output/mps-global/";
+            outputPath += "global_output_" + inputFile;
+            outputPath = outputPath.substr(0, outputPath.find_last_of('.')) + ".cpp"; // replace .csv with .cpp
+            // remove spaces
+            outputPath.erase(remove(outputPath.begin(), outputPath.end(), ' '), outputPath.end());
+            ofstream output;
+
+            cout << "Writing to " << outputPath << "\n";
+            output.open(outputPath, fstream::out);
+
+            if (!output) {
+                cout << "Could not open output file " << outputPath << "\n";
+                exit(1);
+            }
+            output << outputFileInitialContent;
+
+            output << "\treturn " << functionChainGlobal << ";\n}\n";
+            output.close();
+
+            cout << "----------------------------------------\n";
+        }
+
+        return result;
+    } else {
+        // get all csv inputFiles in the directory from inputFiles.txt
+        inputFiles.open("input/mps-local/input_files.txt");
+        if (!inputFiles) {
+            exit(1);
+        }
+        while (!inputFiles.eof()) {
+            string inputFile;
+            getline(inputFiles, inputFile);
+            if (inputFile.empty()) {
+                continue;
+            }
+            if (inputFile.find(".CSV") == string::npos && inputFile.find(".csv") == string::npos) {
+                continue;
+            }
+
+            cout << "Parsing " << inputFile << "\n";
+
+            Parser main = Parser();
+
+            result &= main.parseLocal(main.localPixels, "input/mps-local/" + inputFile);
+
+            string functionChainLocal = main.createFunctionChainLocal();
+
+            // Append to output
+            string outputPath = "output/mps-local/";
+            outputPath += "local_output_" + inputFile;
+            outputPath = outputPath.substr(0, outputPath.find_last_of('.')) + ".cpp"; // replace .csv with .cpp
+            // remove spaces
+            outputPath.erase(remove(outputPath.begin(), outputPath.end(), ' '), outputPath.end());
+            ofstream output;
+
+            cout << "Writing to " << outputPath << "\n";
+            output.open(outputPath, fstream::out);
+
+            if (!output) {
+                cout << "Could not open output file " << outputPath << "\n";
+                exit(1);
+            }
+            output << outputFileInitialContent;
+
+            output << "\treturn " << functionChainLocal << ";\n}\n";
+            output.close();
+
+            cout << "----------------------------------------\n";
+        }
+
     }
+}
 
-    return result;
-
-
+int main() {
+    bool isGlobal = false;
+    int result = mainType(isGlobal);
 }
