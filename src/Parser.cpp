@@ -314,6 +314,26 @@ string Parser::createFunctionChainLocal() {
     return functionChain;
 }
 
+vector<string> findFileNames(const string& name) {
+    ifstream fileNamesStream;
+    fileNamesStream.open(name);
+    if (!fileNamesStream) {
+        exit(1);
+    }
+    // Put each input file in an array fileNamesStream
+    vector<string> fileNames;
+    while (!fileNamesStream.eof()) {
+        string fileName;
+        getline(fileNamesStream, fileName);
+        if (fileName.empty()) {
+            continue;
+        }
+        fileNames.push_back(fileName);
+    }
+
+    fileNamesStream.close();
+    return fileNames;
+}
 
 int mainType(bool isGlobal) {
     // Fill output with defines for functions
