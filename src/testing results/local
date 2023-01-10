@@ -1,0 +1,143 @@
+C:\Users\Bogdan\CLionProjects\MPS_Project\cmake-build-debug\MPS_Project.exe
+Test 1
+Parsing [AVE_INT] 10_2.CSV
+Parsing [S-MS]z34-F3s.CSV
+Parsing [NoisyOffice]Fontfse_Noisew_TR.CSV
+Parsing [NoisyOffice]Fontnre_Noisew_TE.CSV
+Parsing [AVE_INT] 7_11.CSV
+Parsing [AVE_INT] 7_4.CSV
+Parsing [NouvelObservateur]166_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NoisyOffice]FontLsm_Noisef_VA.CSV
+Parsing [AVE_INT] 4_2.CSV
+Parsing [S-MS]z592-F6s.CSV
+Reached a batch score of 90.3766(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 2
+Parsing [AVE_INT] 2_11.CSV
+Parsing [MAX_INT]9_9.CSV
+Parsing [NoisyOffice]Fontfsm_Noisef_TR.CSV
+Parsing [AVE_INT] 9_8.CSV
+Parsing [NoisyOffice]Fontnrm_Noisef_VA.CSV
+Parsing [NoisyOffice]FontLte_Noisef_VA.CSV
+Parsing [AVE_INT] 3_3.CSV
+Parsing [cmaterdb4.3]096.CSV
+Parsing [NouvelObservateur]190_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NoisyOffice]Fontftm_Noisef_TE.CSV
+Reached a batch score of 83.3059(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 3
+Parsing [AVE_INT] 3_1.CSV
+Parsing [NoisyOffice]Fontnre_Noisef_TE.CSV
+Parsing [Nabuco]0024.CSV
+Parsing [MAX_INT]9_15.CSV
+Parsing [NouvelObservateur]194_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NouvelObservateur]22_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NoisyOffice]Fontfsm_Noisep_TE.CSV
+Parsing [PHIBD_2012]HW_Persian01.CSV
+Parsing [AVE_INT] 7_15.CSV
+Parsing [MAX_INT]2_3.CSV
+Reached a batch score of 80.294(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 4
+Parsing [AVE_INT] 4_14.CSV
+Parsing [NouvelObservateur]210_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [S-MS]z32-F6s.CSV
+Parsing [NoisyOffice]FontLtm_Noisep_TR.CSV
+Parsing [NouvelObservateur]110_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [S-MS]z82-F1s.CSV
+Parsing [NouvelObservateur]198_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [AVE_INT] 7_7.CSV
+Parsing [PalmLeaf-PL1]IIB-2-180-P1.CSV
+Parsing [S-MS]z37-F5s.CSV
+Reached a batch score of 82.1044(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 5
+Parsing [AVE_INT] 5_15.CSV
+Parsing [DIBCO_2017]14.CSV
+Parsing [MAX_INT]3_13.CSV
+Parsing [NoisyOffice]FontLtm_Noisep_TR.CSV
+Parsing [S-MS]z64-F8s.CSV
+Parsing [MAX_INT]8_8.CSV
+Parsing [NouvelObservateur]64_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [H-DIBCO_2010]HW_H09.CSV
+Parsing [NoisyOffice]Fontnre_Noisew_TR.CSV
+Parsing [NoisyOffice]Fontnse_Noisef_TE.CSV
+Reached a batch score of 80.8085(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 6
+Parsing [AVE_INT] 6_13.CSV
+Parsing [MAX_INT]5_8.CSV
+Parsing [H-DIBCO_2016]HW_5.CSV
+Parsing [S-MS]z27-F6s.CSV
+Parsing [AVE_INT] 2_6.CSV
+Parsing [AVE_INT] 9_8.CSV
+Parsing [NouvelObservateur]57_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NoisyOffice]Fontfte_Noisep_TE.CSV
+Parsing [S-MS]z90-F1s.CSV
+Parsing [MAX_INT]9_6.CSV
+Reached a batch score of 89.1837(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 7
+Parsing [AVE_INT] 7_14.CSV
+Parsing [S-MS]z592-F6s.CSV
+Parsing [PalmLeaf-PL1]IIIC-24-1641-P2.CSV
+Parsing [DIBCO_2019]2.CSV
+Parsing [MAX_INT]4_7.CSV
+Parsing [NoisyOffice]Fontnre_Noisep_TE.CSV
+Parsing [NouvelObservateur]98_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NouvelObservateur]154_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [DIBCO_2017]16.CSV
+Parsing [AVE_INT] 8_5.CSV
+Reached a batch score of 69.2994(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 8
+Parsing [AVE_INT] 8_2.CSV
+Parsing [AVE_INT] 3_4.CSV
+Parsing [DIBCO_2019]3.CSV
+Parsing [DIBCO_2019]19.CSV
+Parsing [AVE_INT] 6_8.CSV
+Parsing [NoisyOffice]Fontnrm_Noisef_VA.CSV
+Parsing [PalmLeaf-PL1]IIB-2-180-P3.CSV
+Parsing [MAX_INT]8_4.CSV
+Parsing [AVE_INT] 4_11.CSV
+Parsing [PHIBD_2012]HW_Persian13.CSV
+Reached a batch score of 75.9619(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 9
+Parsing [AVE_INT] 9_3.CSV
+Parsing [NoisyOffice]Fontnte_Noisew_TR.CSV
+Parsing [cmaterdb4.3]044.CSV
+Parsing [DIBCO_2019]19.CSV
+Parsing [MAX_INT]8_9.CSV
+Parsing [NoisyOffice]Fontnse_Noisef_TR.CSV
+Parsing [MAX_INT]3_7.CSV
+Parsing [cmaterdb4.3]018.CSV
+Parsing [LiveMemory]sbt98_pag_053.CSV
+Parsing [NoisyOffice]FontLrm_Noisef_VA.CSV
+Reached a batch score of 57.9059(local)
+Writing to output/mps-local/local_output.txt
+------------------
+Test 10
+Parsing [cmaterdb4.2]020.CSV
+Parsing [PalmLeaf-PL1]IIA-5-789-P7.CSV
+Parsing [NouvelObservateur]52_nouvel-obs_hbhnr300_constructedPdf_Nouvelobs2402PDF.CSV
+Parsing [NoisyOffice]FontLte_Noisef_TR.CSV
+Parsing [NoisyOffice]FontLrm_Noisew_TR.CSV
+Parsing [PalmLeaf-PL1]Bangli-P13.CSV
+Parsing [PalmLeaf-PL1]IIIC-19-1293-P8.CSV
+Parsing [PalmLeaf-PL1]IIIC-24-1641-P8.CSV
+Parsing [PalmLeaf-PL1]Bangli-P77.CSV
+Parsing [S-MS]z60-F8s.CSV
+Reached a batch score of 81.8015(local)
+Writing to output/mps-local/local_output.txt
+------------------
+
+Process finished with exit code 0

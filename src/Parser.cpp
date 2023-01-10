@@ -251,13 +251,13 @@ double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int n
         ratio = numerator / denominator;
     }
 
-
-    return numerator / denominator;
+    return ratio;
 }
 
 
 string Parser::createFunctionChainLocal(unsigned seed, int noNodesToGenerate, int &noNodesGenerated, double &score) {
     int noTruePositives = 0, noFalsePositives = 0, noFalseNegatives = 0, noTrueNegatives = 0;
+    score = 0;
     double fMeasureLocalAverage = 0;
     string functionChain;
     for (auto &localPixel: localPixels) {
@@ -444,7 +444,7 @@ int mainType(bool isGlobal) {
         int noNodesRemaining = 100;
         double score = 0;
         double batchScore = score;
-        string functionChainLocal = "";
+        string functionChainLocal;
 
         // Get the first filename and generate a tree, which will be reused on the other filenames
         for (auto &fileName: fileNamesBatch) {
@@ -459,7 +459,7 @@ int mainType(bool isGlobal) {
             auto seed = (unsigned) time(nullptr);
             int noNodesGenerated = 0;
 
-             functionChainLocal = parser.createFunctionChainLocal(
+            functionChainLocal = parser.createFunctionChainLocal(
                     seed, noNodesRemaining, noNodesGenerated, score
             );
             batchScore += score;
