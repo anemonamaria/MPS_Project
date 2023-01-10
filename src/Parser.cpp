@@ -238,7 +238,7 @@ double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int n
 string Parser::createFunctionChainLocal() {
     int noTruePositives = 0, noFalsePositives = 0, noFalseNegatives = 0, noTrueNegatives = 0;
     double fMeasureLocalAverage = 0;
-    string functionChain = "";
+    string functionChain;
     for (auto &localPixel: localPixels) {
 //        cout << "\nLocal pixel:\n";
 
@@ -327,19 +327,21 @@ int mainType(bool isGlobal) {
     outputFileInitialContent += "#define maxFunction(x, y) (max(x, y))\n";
     outputFileInitialContent += "using namespace std;\n";
     outputFileInitialContent += "\ndouble binarization(double* thresholds){\n";
-    ifstream inputFiles;
+    ifstream fileNamesStream;
     int result = 0;
 
     if (isGlobal) {
-        // get all csv inputFiles in the directory from inputFiles.txt
-        inputFiles.open("input/mps-global/input_files.txt");
-        if (!inputFiles) {
-            exit(1);
+        // get all csv fileNamesStream in the directory from fileNamesStream.txt
+        vector <string> fileNames = findFileNames("input/mps-global/input_files.txt");
+        // print each file name
+        for (auto & fileName : fileNames) {
+            cout << fileName << '\n';
         }
+//        return 0;
 
-        while (!inputFiles.eof()) {
+        while (!fileNamesStream.eof()) {
             string inputFile;
-            getline(inputFiles, inputFile);
+            getline(fileNamesStream, inputFile);
             if (inputFile.empty()) {
                 continue;
             }
@@ -380,14 +382,21 @@ int mainType(bool isGlobal) {
 
         return result;
     } else {
-        // get all csv inputFiles in the directory from inputFiles.txt
-        inputFiles.open("input/mps-local/input_files.txt");
-        if (!inputFiles) {
+        // get all csv fileNamesStream in the directory from fileNamesStream.txt
+        vector <string> fileNames = findFileNames("input/mps-local/input_files.txt");
+        // print each file name
+        for (auto & fileName : fileNames) {
+            cout << fileName << '\n';
+        }
+//        return 0;
+
+        fileNamesStream.open("input/mps-local/input_files.txt");
+        if (!fileNamesStream) {
             exit(1);
         }
-        while (!inputFiles.eof()) {
+        while (!fileNamesStream.eof()) {
             string inputFile;
-            getline(inputFiles, inputFile);
+            getline(fileNamesStream, inputFile);
             if (inputFile.empty()) {
                 continue;
             }
@@ -427,9 +436,10 @@ int mainType(bool isGlobal) {
         }
 
     }
+    return result;
 }
 
 int main() {
-    bool isGlobal = false;
+    bool isGlobal = true;
     int result = mainType(isGlobal);
 }
