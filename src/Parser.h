@@ -38,7 +38,7 @@ public:
 
     string printTree(Node *pNode);
 
-    string createFunctionChainLocal();
+    string createFunctionChainLocal(unsigned seed, int noNodesRemaining, int &noNodesGenerated, double &score);
 
     __attribute__((unused)) double getFMeasureLocal(int noTruePositives, int noFalsePositives, int noTrueNegatives, int noFalseNegatives);
 };
