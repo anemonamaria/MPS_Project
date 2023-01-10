@@ -11,15 +11,8 @@ Node::Node(Node *leftParent, Node *rightParent) {
 
     // Creates random number generator for extracting random function
     Functions functions;
-    time_t timeVar;
-    srand((unsigned) time(&timeVar));
 
-    // c++11 random
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, functions.array.size() - 1);
-
-    int functionIndex = dis(gen);
+    int functionIndex = rand() % functions.array.size();
     function = functions.array[functionIndex];
     functionName = functions.names[functionIndex];
     identifier = "";

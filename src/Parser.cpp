@@ -2,7 +2,8 @@
 // Created by Bogdan on 13-Nov-22.
 // [PalmLeaf-PL1]WN-P1b.csv
 #include "Parser.h"
-
+#include <chrono>
+#include <thread>
 // Valoare globalPixel	Clasa globalPixel	Average threshold	Midrange threshold	White threshold	Bernsen threshold	Niblack threshold	Sauvola threshold	Wolf threshold	Phansalkar threshold	Nick threshold	Gaussian threshold
 
 int mainType(bool global);
@@ -81,7 +82,6 @@ int Parser::parseGlobal(GlobalPixel &globalPixel, string filePath) {
     size_t pos = 0;
     string token;
 
-    // todo move to function
     pos = line.find(delimiter); // find comma
     token = line.substr(0, pos);
     globalPixel.setReference(stod(token));
@@ -128,7 +128,6 @@ int Parser::parseGlobal(GlobalPixel &globalPixel, string filePath) {
     }
     globalPixel.setFMeasures(fMeasures);
 
-    // cout << '\n';
     return 0;
 }
 
@@ -151,7 +150,7 @@ __attribute__((unused)) void Parser::printGlobal() {
     cout << "\n\n";
 }
 
-string Parser::createFunctionChainGlobal() {
+string Parser::createFunctionChainGlobal(unsigned seed, int noNodesToGenerate, int &noNodesGenerated, double &score) {
     // Create intial nodes (leafs) from the thresholds of the global pixel
     vector<double> thresholds = globalPixel.getThresholds();
 
@@ -168,18 +167,20 @@ string Parser::createFunctionChainGlobal() {
     }
 
     // Create random new node
-    time_t timeVar;
-    srand((unsigned) time(&timeVar));
-
+    srand(seed);
     Node *newNode;
     double limit = 0;
-    for (const auto &item: globalPixel.getFMeasures()) {
-        if (item > limit) {
-            limit = item;
+
+    if (noNodesToGenerate == INT_MAX) {
+        // This is the CSV file which is used to generate the tree that will be tested on the other CSV files
+        // The tree is created with the ideal fMeasure (determined by 'limit') so we can generate as many nodes as we want
+        for (const auto &item: globalPixel.getFMeasures()) {
+            if (item > limit) {
+                limit = item;
+            }
         }
+        limit -= 5;
     }
-    limit -= 15;
-    cout << "Trying to find a node with fMeasure > " << limit << '\n';
 
     // Generate nodes until fMeasure is bigger than desired value
     int noRemainingRetries = 10;
@@ -203,11 +204,21 @@ string Parser::createFunctionChainGlobal() {
 
         // get maximum of the fMeasures and minus 5
 
-        if (fMeasure > limit) {
-            // This node is root
-            cout << "Root node: " << newNode->threshold << " with fMeasure: " << fMeasure << '\n';
-            break;
+        if (noNodesToGenerate == INT_MAX) {
+            if (fMeasure > limit) {
+                // This node is root
+                noNodesGenerated = treeGlobal.size();
+                score = fMeasure;
+                break;
+            }
+        } else {
+            --noNodesToGenerate;
+            if (noNodesToGenerate == 0) {
+                score = fMeasure;
+                break;
+            }
         }
+
     }
 
     //  newNode is the root of the tree
@@ -309,12 +320,12 @@ string Parser::createFunctionChainLocal() {
         functionChain = printTree(newNode);
     }
 
-    fMeasureLocalAverage /= (double)localPixels.size();
+    fMeasureLocalAverage /= (double) localPixels.size();
     cout << "Average fMeasure local: " << fMeasureLocalAverage << '\n';
     return functionChain;
 }
 
-vector<string> findFileNames(const string& name) {
+vector<string> findFileNamesBatch(const string &name) {
     ifstream fileNamesStream;
     fileNamesStream.open(name);
     if (!fileNamesStream) {
@@ -328,11 +339,24 @@ vector<string> findFileNames(const string& name) {
         if (fileName.empty()) {
             continue;
         }
+        if (fileName.find(".CSV") == string::npos && fileName.find(".csv") == string::npos) {
+            continue;
+        }
         fileNames.push_back(fileName);
     }
 
+    // Get only a random batch from the file names
+    srand(time(NULL));
+    int batchSize = 10;
+    vector<string> fileNamesBatch;
+
+    for (int i = 0; i < batchSize; ++i) {
+        fileNamesBatch.push_back(fileNames[rand() % fileNames.size()]);
+    }
+
     fileNamesStream.close();
-    return fileNames;
+
+    return fileNamesBatch;
 }
 
 int mainType(bool isGlobal) {
@@ -352,60 +376,75 @@ int mainType(bool isGlobal) {
 
     if (isGlobal) {
         // get all csv fileNamesStream in the directory from fileNamesStream.txt
-        vector <string> fileNames = findFileNames("input/mps-global/input_files.txt");
-        // print each file name
-        for (auto & fileName : fileNames) {
-            cout << fileName << '\n';
+
+        vector<string> fileNamesBatch = findFileNamesBatch("input/mps-global/input_files.txt");
+
+        // Get the first filename and generate a tree, which will be reused on the other filenames
+        string fileName = fileNamesBatch[0];
+        Parser parser = Parser();
+        result &= parser.parseGlobal(parser.globalPixel, "input/mps-global/" + fileName);
+
+        auto seed = (unsigned) time(nullptr);
+        int noNodesGenerated = 0, noNodesRemaining = INT_MAX;
+        double score = 0;
+        string functionChainGlobal = parser.createFunctionChainGlobal(
+                seed, noNodesRemaining, noNodesGenerated, score
+        );
+
+        // We will generate as many nodes as we managed to create for the first CSV
+        noNodesRemaining = noNodesGenerated;
+
+        double batchScore = score;
+
+        // Reapply the function chain on the other filenames
+        for (int i = 1; i < fileNamesBatch.size(); ++i) {
+            fileName = fileNamesBatch[i];
+            cout << "Parsing " << fileName << "\n";
+
+            parser = Parser();
+
+            result &= parser.parseGlobal(parser.globalPixel, "input/mps-global/" + fileName);
+
+            functionChainGlobal = parser.createFunctionChainGlobal(
+                    seed, noNodesRemaining, noNodesGenerated, score
+            );
+            batchScore += score;
         }
-//        return 0;
+        batchScore /= (double)fileNamesBatch.size();
 
-        while (!fileNamesStream.eof()) {
-            string inputFile;
-            getline(fileNamesStream, inputFile);
-            if (inputFile.empty()) {
-                continue;
-            }
-            if (inputFile.find(".CSV") == string::npos && inputFile.find(".csv") == string::npos) {
-                continue;
-            }
+        cout << "Reached a batch score of " << batchScore << "\n";
 
-            cout << "Parsing " << inputFile << "\n";
+        // Append to output
+        string outputPath = "output/mps-global/";
+//        outputPath += "global_output_" + fileName;
+//        outputPath = outputPath.substr(0, outputPath.find_last_of('.')) + ".cpp"; // replace .csv with .cpp
 
-            Parser main = Parser();
+        outputPath += "global_output.txt";
 
-            result &= main.parseGlobal(main.globalPixel, "input/mps-global/" + inputFile);
+        // remove spaces
+        outputPath.erase(remove(outputPath.begin(), outputPath.end(), ' '), outputPath.end());
+        ofstream output;
 
-            string functionChainGlobal = main.createFunctionChainGlobal();
+        cout << "Writing to " << outputPath << "\n";
+        output.open(outputPath, fstream::out);
 
-            // Append to output
-            string outputPath = "output/mps-global/";
-            outputPath += "global_output_" + inputFile;
-            outputPath = outputPath.substr(0, outputPath.find_last_of('.')) + ".cpp"; // replace .csv with .cpp
-            // remove spaces
-            outputPath.erase(remove(outputPath.begin(), outputPath.end(), ' '), outputPath.end());
-            ofstream output;
-
-            cout << "Writing to " << outputPath << "\n";
-            output.open(outputPath, fstream::out);
-
-            if (!output) {
-                cout << "Could not open output file " << outputPath << "\n";
-                exit(1);
-            }
-            output << outputFileInitialContent;
-
-            output << "\treturn " << functionChainGlobal << ";\n}\n";
-            output.close();
-
-            cout << "----------------------------------------\n";
+        if (!output) {
+            cout << "Could not open output file " << outputPath << "\n";
+            exit(1);
         }
+        output << outputFileInitialContent;
+
+        output << "\treturn " << functionChainGlobal << ";\n}\n";
+        output.close();
+
+        cout << "----------------------------------------\n";
 
         return result;
     } else {
         // get all csv fileNamesStream in the directory from fileNamesStream.txt
-        vector <string> fileNames = findFileNames("input/mps-local/input_files.txt");
+        vector<string> fileNames = findFileNamesBatch("input/mps-local/input_files.txt");
         // print each file name
-        for (auto & fileName : fileNames) {
+        for (auto &fileName: fileNames) {
             cout << fileName << '\n';
         }
 //        return 0;
@@ -423,8 +462,6 @@ int mainType(bool isGlobal) {
             if (inputFile.find(".CSV") == string::npos && inputFile.find(".csv") == string::npos) {
                 continue;
             }
-
-            cout << "Parsing " << inputFile << "\n";
 
             Parser main = Parser();
 
@@ -460,6 +497,21 @@ int mainType(bool isGlobal) {
 }
 
 int main() {
-    bool isGlobal = true;
-    int result = mainType(isGlobal);
+    bool isGlobal = false;
+    int result = 0;
+
+    int noTests = 1;
+
+    for (int i = 0; i < noTests; ++i) {
+        cout << "Test " << i + 1 << "\n";
+        result &= mainType(isGlobal);
+
+        // wait 1 second to change time random seed
+        std::this_thread::sleep_for(1s);
+
+        cout << "------------------" << "\n";
+    }
+
+
+    return result;
 }

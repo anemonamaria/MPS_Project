@@ -34,7 +34,7 @@ public:
 
     int parseGlobal(GlobalPixel &globalPixel, string filePath);
 
-    string createFunctionChainGlobal();
+    string createFunctionChainGlobal(unsigned seed, int noNodesToGenerate, int& noNodesGenerated, double& score);
 
     string printTree(Node *pNode);
 

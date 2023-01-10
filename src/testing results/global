@@ -1,0 +1,123 @@
+C:\Users\Bogdan\CLionProjects\MPS_Project\cmake-build-debug\MPS_Project.exe
+Test 1
+Parsing [MAX_INT]2_11-g0.9.CSV
+Parsing [DIBCO_2017]1-g1.2.CSV
+Parsing [AVE_INT] 10_2-g1.8.CSV
+Parsing [AVE_INT] 6_3-g1.8.CSV
+Parsing [H-DIBCO_2016]HW_9-g1.1.CSV
+Parsing [AVE_INT] 5_9-g1.2.CSV
+Parsing [AVE_INT] 3_13.CSV
+Parsing [cmaterdb4.3]094-g1.3.CSV
+Parsing [H-DIBCO_2016]HW_6-g2.CSV
+Reached a batch score of 84.1122
+------------------
+Test 2
+Parsing [AVE_INT] 5_3-g1.1.CSV
+Parsing [MAX_INT]4_5-g0.7.CSV
+Parsing [MAX_INT]6_4-g1.3.CSV
+Parsing [DIBCO_2013]HW_PR03-g0.5.CSV
+Parsing [AVE_INT] 7_11-g1.1.CSV
+Parsing [DIBCO_2017]7.CSV
+Parsing [MAX_INT]7_8-g1.9.CSV
+Parsing [cmaterdb4.2]021-g0.7.CSV
+Parsing [MAX_INT]6_14.CSV
+Reached a batch score of 92.1198
+------------------
+Test 3
+Parsing [DIBCO_2017]14-g1.7.CSV
+Parsing [MAX_INT]7_1-g1.2.CSV
+Parsing [AVE_INT] 10_1-g2.CSV
+Parsing [MAX_INT]5_1-g1.1.CSV
+Parsing [LiveMemory]sbt94_Pag_321-g1.8.CSV
+Parsing [MAX_INT]8_7-g1.3.CSV
+Parsing [DIBCO_2017]5-g2.CSV
+Parsing [DIBCO_2011]HW_HW3-g1.2.CSV
+Parsing [AVE_INT] 3_7-g1.7.CSV
+Reached a batch score of 70.9722
+------------------
+Test 4
+Parsing [H-DIBCO_2016]HW_9-g1.6.CSV
+Parsing [AVE_INT] 7_7-g1.9.CSV
+Parsing [MAX_INT]6_11-g1.6.CSV
+Parsing [AVE_INT] 6_4-g0.9.CSV
+Parsing [AVE_INT] 7_4-g1.9.CSV
+Parsing [cmaterdb4.3]058-g1.5.CSV
+Parsing [AVE_INT] 6_3.CSV
+Parsing [cmaterdb4.3]006-g0.7.CSV
+Parsing [DIBCO_2017]14-g1.1.CSV
+Reached a batch score of 73.0751
+------------------
+Test 5
+Parsing [AVE_INT] 3_14-g1.6.CSV
+Parsing [cmaterdb4.2]007-g0.6.CSV
+Parsing [MAX_INT]2_10.CSV
+Parsing [AVE_INT] 9_6-g0.5.CSV
+Parsing [LiveMemory]sbt99_pag_568-g0.9.CSV
+Parsing [MAX_INT]2_3-g0.7.CSV
+Parsing [MAX_INT]3_3-g1.1.CSV
+Parsing [DIBCO_2012]HW_H03-g1.1.CSV
+Parsing [MAX_INT]10_4-g1.3.CSV
+Reached a batch score of 70.3666
+------------------
+Test 6
+Parsing [DIBCO_2012]HW_H04-g0.5.CSV
+Parsing [cmaterdb4.3]057-g1.1.CSV
+Parsing [H-DIBCO_2010]HW_H02-g0.9.CSV
+Parsing [Einsieldeln]e-codices_sbe-0611_001v_Layered-g1.1.CSV
+Parsing [AVE_INT] 8_11-g0.9.CSV
+Parsing [AVE_INT] 6_14-g0.9.CSV
+Parsing [DIBCO_2009]MP_P02-g1.2.CSV
+Parsing [cmaterdb4.3]058-g0.6.CSV
+Parsing [MAX_INT]8_12-g1.5.CSV
+Reached a batch score of 82.9051
+------------------
+Test 7
+Parsing [AVE_INT] 10_11.CSV
+Parsing [MAX_INT]10_7-g1.1.CSV
+Parsing [Einsieldeln]e-codices_sbe-0611_003r_Layered-g1.3.CSV
+Parsing [AVE_INT] 2_11-g0.5.CSV
+Parsing [AVE_INT] 10_1-g0.9.CSV
+Parsing [MAX_INT]9_12-g1.1.CSV
+Parsing [H-DIBCO_2014]HW_H08-g2.CSV
+Parsing [cmaterdb4.3]093-g0.5.CSV
+Parsing [cmaterdb4.3]044-g1.3.CSV
+Reached a batch score of 74.5565
+------------------
+Test 8
+Parsing [cmaterdb4.3]094-g1.2.CSV
+Parsing [AVE_INT] 2_4-g1.8.CSV
+Parsing [DIBCO_2012]HW_H14-g1.8.CSV
+Parsing [cmaterdb4.3]067-g1.1.CSV
+Parsing [DIBCO_2013]HW_PR03-g1.7.CSV
+Parsing [AVE_INT] 5_15-g0.5.CSV
+Parsing [cmaterdb4.2]000-g2.CSV
+Parsing [DIBCO_2017]13-g0.8.CSV
+Parsing [MAX_INT]3_2-g0.6.CSV
+Reached a batch score of 90.2342
+------------------
+Test 9
+Parsing [DIBCO_2017]4-g0.9.CSV
+Parsing [AVE_INT] 5_1-g0.5.CSV
+Parsing [cmaterdb4.3]058-g0.7.CSV
+Parsing [LiveMemory]sbt98_pag_053-g1.5.CSV
+Parsing [AVE_INT] 10_2-g1.7.CSV
+Parsing [DIBCO_2017]18-g1.4.CSV
+Parsing [MAX_INT]7_1-g1.1.CSV
+Parsing [DIBCO_2011]HW_HW1.CSV
+Parsing [Nabuco]0024-g0.8.CSV
+Reached a batch score of 88.3947
+------------------
+Test 10
+Parsing [MAX_INT]8_11-g1.6.CSV
+Parsing [DIBCO_2011]HW_HW5-g1.8.CSV
+Parsing [DIBCO_2012]HW_H07.CSV
+Parsing [MAX_INT]3_5-g1.2.CSV
+Parsing [DIBCO_2017]11-g0.7.CSV
+Parsing [MAX_INT]8_13-g0.6.CSV
+Parsing [DIBCO_2017]11-g1.2.CSV
+Parsing [DIBCO_2019]1-g0.8.CSV
+Parsing [AVE_INT] 7_2.CSV
+Reached a batch score of 73.4863
+------------------
+
+Process finished with exit code 0
