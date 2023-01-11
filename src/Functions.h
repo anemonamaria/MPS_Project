@@ -12,27 +12,8 @@
 #include <iostream>
 
 using namespace std;
-/*
- * a, b ----> (1/(1/a + 1/b)) + (a+b)/2
- * a, b ----> harmonicMean(a,b)+ arithmeticmean(..
- *
- */
-
-
-
-// * nod root
-// * parcurge(root)
-// * generateString(root)
-// * (generateString (left) + generateString(right))
-// *geneerateString (leftleft) + generatestringrighright) + valRight
-
-using namespace std;
 
 typedef double(*Function)(double, double);
-//class  Opperation {
-//    string operationstring;
-//    double threshold;
-//};        string operatie ="(" + operationstring + " + " + b +  ")/2";
 
 class Functions {
 public:
