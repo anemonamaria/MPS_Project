@@ -4,6 +4,12 @@
 #include "Parser.h"
 #include <chrono>
 #include <thread>
+
+#define batchSize 10
+#define noTests 10
+const bool isFullRun = true;
+const bool isGlobal = true;
+
 // Valoare globalPixel	Clasa globalPixel	Average threshold	Midrange threshold	White threshold	Bernsen threshold	Niblack threshold	Sauvola threshold	Wolf threshold	Phansalkar threshold	Nick threshold	Gaussian threshold
 
 int mainType(bool global);
@@ -257,6 +263,7 @@ double Parser::getFMeasureLocal(int noTruePositives, int noFalsePositives, int n
 
 string Parser::createFunctionChainLocal(unsigned seed, int noNodesToGenerate, int &noNodesGenerated, double &score) {
     int noTruePositives = 0, noFalsePositives = 0, noFalseNegatives = 0, noTrueNegatives = 0;
+    Node *newNode;
     score = 0;
     double fMeasureLocalAverage = 0;
     string functionChain;
@@ -278,7 +285,6 @@ string Parser::createFunctionChainLocal(unsigned seed, int noNodesToGenerate, in
         time_t timeVar;
         srand(seed);
 
-        Node *newNode;
 
         int idNewNode = 0;
         while (noNodesToGenerate) {
@@ -313,17 +319,16 @@ string Parser::createFunctionChainLocal(unsigned seed, int noNodesToGenerate, in
                 }
             }
         }
-        double fMeasureLocal = getFMeasureLocal(
-                noTruePositives,
-                noFalsePositives,
-                noTrueNegatives,
-                noFalseNegatives
-        );
-        fMeasureLocalAverage += fMeasureLocal;
-        functionChain = printTree(newNode);
-    }
 
-    fMeasureLocalAverage /= (double) localPixels.size();
+    }
+    double fMeasureLocal = getFMeasureLocal(
+            noTruePositives,
+            noFalsePositives,
+            noTrueNegatives,
+            noFalseNegatives
+    );
+    fMeasureLocalAverage = fMeasureLocal;
+    functionChain = printTree(newNode);
     score = fMeasureLocalAverage * 100;
     return functionChain;
 }
@@ -350,14 +355,17 @@ vector<string> findFileNamesBatch(const string &name) {
 
     // Get only a random batch from the file names
     srand(time(NULL));
-    int batchSize = 10;
     vector<string> fileNamesBatch;
 
     for (int i = 0; i < batchSize; ++i) {
         fileNamesBatch.push_back(fileNames[rand() % fileNames.size()]);
     }
 
-    fileNamesBatch = fileNames;
+    /// if you want to parse all filess
+    if (isFullRun) {
+        fileNamesBatch = fileNames;
+    }
+
 
     fileNamesStream.close();
 
@@ -410,9 +418,10 @@ int mainType(bool isGlobal) {
         double batchScore = score;
 
         // Reapply the function chain on the other filenames
+        cout << "Parsing " << fileNamesBatch.size() << " files" << "\n";
         for (int i = 1; i < fileNamesBatch.size(); ++i) {
             fileName = fileNamesBatch[i];
-            cout << "Parsing " << fileName << "\n";
+//            cout << "Parsing " << fileName << "\n";
 
             parser = Parser();
 
@@ -503,10 +512,7 @@ int mainType(bool isGlobal) {
 }
 
 int main() {
-    bool isGlobal = true;
     int result = 0;
-
-    int noTests = 10;
 
     for (int i = 0; i < noTests; ++i) {
         cout << "Test " << i + 1 << "\n";
